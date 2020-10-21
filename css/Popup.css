@@ -41,8 +41,10 @@ body {
 
 .SearchInput {
     width: 10rem;
+    line-height: 1.3rem;
 }
 
 .SearchButton {
     cursor: pointer;
+    line-height: 1.3rem;
 }

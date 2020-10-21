@@ -32,10 +32,22 @@
             }
         ],
         marketsArea = document.getElementsByClassName('MarketsArea')[0],
-        communitiesArea = document.getElementsByClassName('CommunitiesArea')[0];
+        communitiesArea = document.getElementsByClassName('CommunitiesArea')[0],
+        searchInput = document.getElementsByClassName('SearchInput')[0],
+        searchButton = document.getElementsByClassName('SearchButton')[0];
 
     function openURL(url) {
         chrome.tabs.create({url: url});
+    }
+
+    function searchSites(query) {
+        var encodedQuery = escape(query);
+
+        sites.forEach(function (site) {
+            if (site.type === 'Market') {
+                openURL(site.searchURL.replace('$', encodedQuery));
+            }
+        });
     }
 
     sites.forEach(function (site) {
@@ -58,14 +70,13 @@
         }
     });
 
-    document.getElementsByClassName('SearchButton')[0].addEventListener('click', function () {
-        var query = document.getElementsByClassName('SearchInput')[0].value,
-            encodedQuery = escape(query);
+    searchInput.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
+            searchSites(searchInput.value);
+        }
+    });
 
-        sites.forEach(function (site) {
-            if (site.type === 'Market') {
-                openURL(site.searchURL.replace('$', encodedQuery));
-            }
-        });
+    searchButton.addEventListener('click', function () {
+        searchSites(searchInput.value);
     });
 }());
