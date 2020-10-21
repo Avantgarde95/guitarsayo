@@ -23,7 +23,8 @@
             {
                 type: 'Community',
                 name: '뮬 Mule',
-                url: 'https://www.mule.co.kr/'
+                url: 'https://www.mule.co.kr/',
+                searchURL: 'https://www.mule.co.kr/bbs/market/sell?page=1&map=list&mode=list&region=&start_price=&end_price=&qf=title&qs=$&category=&ct1=&ct2=&ct3=&store=&options=&soldout=&sido=&gugun=&dong=&period=6&of=wdate&od=desc&v=l'
             },
             {
                 type: 'Community',
@@ -41,10 +42,15 @@
     }
 
     function searchSites(query) {
-        var encodedQuery = escape(query);
+        var encodedQuery = encodeURIComponent(query.trim());
+
+        if (encodedQuery.length === 0) {
+            alert('검색어를 입력하세요.');
+            return;
+        }
 
         sites.forEach(function (site) {
-            if (site.type === 'Market') {
+            if (site.hasOwnProperty('searchURL')) {
                 openURL(site.searchURL.replace('$', encodedQuery));
             }
         });
