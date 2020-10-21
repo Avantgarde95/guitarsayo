@@ -38,3 +38,11 @@ body {
     height: 2rem;
     margin-bottom: 0.5rem;
 }
+
+.SearchInput {
+    width: 10rem;
+}
+
+.SearchButton {
+    cursor: pointer;
+}
