@@ -1,0 +1,43 @@
+{
+    "name": "기타사요 GuitarSayo",
+    "version": "1.0",
+    "description": "악기 구매 도우미",
+    "manifest_version": 2,
+    "permissions": [
+        "declarativeContent",
+        "tabs",
+        "activeTab"
+    ],
+    "background": {
+        "scripts": [
+            "js/Background.js"
+        ],
+        "persistent": false
+    },
+    "page_action": {
+        "default_popup": "index.html",
+        "default_icon": {
+            "16": "image/Icon16.png",
+            "32": "image/Icon32.png",
+            "48": "image/Icon48.png",
+            "128": "image/Icon128.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "js": [
+                "js/Content.js"
+            ]
+        }
+    ],
+    "icons": {
+        "16": "image/Icon16.png",
+        "32": "image/Icon32.png",
+        "48": "image/Icon48.png",
+        "128": "image/Icon128.png"
+    }
+}
