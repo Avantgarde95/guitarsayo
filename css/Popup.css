@@ -30,7 +30,7 @@ body {
     margin-bottom: 1rem;
 }
 
-.MarketButton {
+.LinkButton {
     display: block;
     cursor: pointer;
     text-align: left;
