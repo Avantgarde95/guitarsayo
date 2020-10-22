@@ -27,6 +27,8 @@ body {
 }
 
 .SectionArea {
+    overflow-y: auto;
+    max-height: 10rem;
     margin-bottom: 1rem;
 }
 

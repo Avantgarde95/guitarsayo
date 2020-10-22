@@ -10,6 +10,12 @@
             },
             {
                 type: 'Market',
+                name: '뮤직포스 Music Force',
+                url: 'http://musicforce.co.kr',
+                searchURL: 'https://musicforce.co.kr/product/search.html?banner_action=&keyword=$'
+            },
+            {
+                type: 'Market',
                 name: '프리버드 Freebud',
                 url: 'http://www.freebud.co.kr',
                 searchURL: 'http://www.freebud.co.kr/shop/goods/goods_search.php?disp_type=&hid_sword=&searched=Y&log=1&sort=&page_num=&delivery=&view=&total=&searchword=&new_goods=&skey=all&sword=$'
