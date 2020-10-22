@@ -63,21 +63,39 @@
     }
 
     sites.forEach(function (site) {
-        var button = document.createElement('button');
+        var linkArea = document.createElement('div'),
+            linkButton = document.createElement('button'),
+            searchOptionLabel = document.createElement('label'),
+            searchOptionCheckbox = document.createElement('input');
 
-        button.className = 'LinkButton';
-        button.innerHTML = site.name;
+        linkButton.className = 'LinkButton';
+        linkButton.innerHTML = site.name;
 
-        button.addEventListener('click', function () {
+        linkButton.addEventListener('click', function () {
             openURL(site.url);
         });
 
+        searchOptionCheckbox.className = 'SearchOptionCheckbox';
+        searchOptionCheckbox.type = 'checkbox';
+        searchOptionCheckbox.checked = true;
+
+        searchOptionLabel.className = 'SearchOptionLabel';
+        searchOptionLabel.innerHTML = '검색';
+        searchOptionLabel.appendChild(searchOptionCheckbox);
+
+        linkArea.className = 'LinkArea';
+        linkArea.appendChild(linkButton);
+
+        if (site.hasOwnProperty('searchURL')) {
+            linkArea.appendChild(searchOptionLabel);
+        }
+
         switch (site.type) {
             case 'Market':
-                marketsArea.appendChild(button);
+                marketsArea.appendChild(linkArea);
                 break;
             case 'Community':
-                communitiesArea.appendChild(button);
+                communitiesArea.appendChild(linkArea);
                 break;
         }
     });
