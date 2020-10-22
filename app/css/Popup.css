@@ -41,6 +41,10 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.LinkButton:last-child {
+    margin-bottom: 0;
+}
+
 .SearchInput {
     width: 10rem;
     line-height: 1.3rem;
