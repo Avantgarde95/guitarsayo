@@ -36,6 +36,33 @@ var allSites = [
         }
     },
     {
+        type: 'Market',
+        name: '국제미디 Kukje Midi',
+        url: 'http://www.all4sound.com',
+        search: {
+            url: 'http://www.all4sound.com/product/search_product.asp?product_name=$',
+            allow: false
+        }
+    },
+    {
+        type: 'Market',
+        name: '다나와 Danawa',
+        url: 'http://www.danawa.com',
+        search: {
+            url: 'http://search.danawa.com/dsearch.php?k1=$&module=goods&act=dispMain',
+            allow: false
+        }
+    },
+    {
+        type: 'Market',
+        name: '당근마켓 Daangn',
+        url: 'https://www.daangn.com',
+        search: {
+            url: 'https://www.daangn.com/search/$',
+            allow: false
+        }
+    },
+    {
         type: 'Community',
         name: '뮬 Mule',
         url: 'https://www.mule.co.kr/',
