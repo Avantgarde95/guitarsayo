@@ -19,15 +19,38 @@
         }
 
         sites.forEach(function (site) {
-            if (site.search !== null && site.search.allow) {
-                openURL(site.search.url.replace('$', encodedQuery));
+            if (site.allowSearch) {
+                openURL(site.searchURL.replace('$', encodedQuery));
             }
         });
     }
 
-    chrome.storage.sync.get({sites: defaultSites}, function (result) {
-        var sites = result.sites;
+    function readSitesFromStorage(handler) {
+        chrome.storage.sync.get({sitesMap: {}}, function (result) {
+            var sitesMap = result.sitesMap,
+                sites = defaultSites.map(function (site) {
+                    if (sitesMap.hasOwnProperty(site.name)) {
+                        return Object.assign({}, site, sitesMap[site.name]);
+                    } else {
+                        return site;
+                    }
+                });
 
+            handler(sites);
+        });
+    }
+
+    function writeSitesToStorage(sites) {
+        var sitesMap = {};
+
+        sites.forEach(function (site) {
+            sitesMap[site.name] = site;
+        });
+
+        chrome.storage.sync.set({sitesMap: sitesMap});
+    }
+
+    readSitesFromStorage(function (sites) {
         sites.forEach(function (site) {
             var linkArea = document.createElement('div'),
                 linkButton = document.createElement('button'),
@@ -45,8 +68,8 @@
             searchOptionCheckbox.type = 'checkbox';
 
             searchOptionCheckbox.addEventListener('change', function () {
-                site.search.allow = searchOptionCheckbox.checked;
-                chrome.storage.sync.set({sites: sites});
+                site.allowSearch = searchOptionCheckbox.checked;
+                writeSitesToStorage(sites);
             });
 
             searchOptionLabel.className = 'SearchOptionLabel';
@@ -56,8 +79,8 @@
             linkArea.className = 'LinkArea';
             linkArea.appendChild(linkButton);
 
-            if (site.search !== null) {
-                searchOptionCheckbox.checked = site.search.allow;
+            if (site.allowSearch !== null) {
+                searchOptionCheckbox.checked = site.allowSearch;
                 linkArea.appendChild(searchOptionLabel);
             }
 
