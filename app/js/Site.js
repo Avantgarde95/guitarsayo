@@ -63,18 +63,12 @@ var allSites = [
         }
     },
     {
-        type: 'Community',
+        type: 'Market',
         name: '뮬 Mule',
-        url: 'https://www.mule.co.kr/',
+        url: 'https://www.mule.co.kr',
         search: {
             url: 'https://www.mule.co.kr/bbs/market/sell?page=1&map=list&mode=list&region=&start_price=&end_price=&qf=title&qs=$&category=&ct1=&ct2=&ct3=&store=&options=&soldout=&sido=&gugun=&dong=&period=6&of=wdate&od=desc&v=l',
             allow: false
         }
-    },
-    {
-        type: 'Community',
-        name: '일렉트릭기타 마이너 갤러리',
-        url: 'https://gall.dcinside.com/mgallery/board/lists?id=electricguitar',
-        search: null
     }
 ];
