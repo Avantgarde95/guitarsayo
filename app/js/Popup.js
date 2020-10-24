@@ -58,6 +58,9 @@
     }
 
     readSitesFromStorage(function (sites) {
+        // Write the data in case the property list is changed.
+        writeSitesToStorage(sites);
+
         sites.forEach(function (site) {
             var linkArea = document.createElement('div'),
                 linkButton = document.createElement('button'),
