@@ -11,16 +11,23 @@
     }
 
     function searchSites(sites, query) {
-        var encodedQuery = encodeURIComponent(query.trim());
+        var trimmedQuery = query.trim();
 
-        if (encodedQuery.length === 0) {
+        if (trimmedQuery.length === 0) {
             alert('검색어를 입력하세요.');
             return;
         }
 
         sites.forEach(function (site) {
+            var finalQuery = trimmedQuery;
+
             if (site.allowSearch) {
-                openURL(site.searchURL.replace('$', encodedQuery));
+                if (site.maxQueryLength > 0) {
+                    finalQuery = finalQuery.substr(0, site.maxQueryLength);
+                }
+
+                finalQuery = encodeURIComponent(finalQuery);
+                openURL(site.searchURL.replace('$', finalQuery));
             }
         });
     }
