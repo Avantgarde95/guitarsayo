@@ -1,4 +1,4 @@
-var allSites = [
+var defaultSites = [
     {
         type: 'Market',
         name: '스쿨뮤직 Schoolmusic',

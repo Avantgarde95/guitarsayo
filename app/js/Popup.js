@@ -1,4 +1,4 @@
-(function (sites) {
+(function () {
     'use strict';
 
     var marketsArea = document.getElementsByClassName('MarketsArea')[0],
@@ -10,7 +10,7 @@
         chrome.tabs.create({url: url});
     }
 
-    function searchSites(query) {
+    function searchSites(sites, query) {
         var encodedQuery = encodeURIComponent(query.trim());
 
         if (encodedQuery.length === 0) {
@@ -25,57 +25,62 @@
         });
     }
 
-    sites.forEach(function (site) {
-        var linkArea = document.createElement('div'),
-            linkButton = document.createElement('button'),
-            searchOptionLabel = document.createElement('label'),
-            searchOptionCheckbox = document.createElement('input');
+    chrome.storage.sync.get({sites: defaultSites}, function (result) {
+        var sites = result.sites;
 
-        linkButton.className = 'LinkButton';
-        linkButton.innerHTML = site.name;
+        sites.forEach(function (site) {
+            var linkArea = document.createElement('div'),
+                linkButton = document.createElement('button'),
+                searchOptionLabel = document.createElement('label'),
+                searchOptionCheckbox = document.createElement('input');
 
-        linkButton.addEventListener('click', function () {
-            openURL(site.url);
+            linkButton.className = 'LinkButton';
+            linkButton.innerHTML = site.name;
+
+            linkButton.addEventListener('click', function () {
+                openURL(site.url);
+            });
+
+            searchOptionCheckbox.className = 'SearchOptionCheckbox';
+            searchOptionCheckbox.type = 'checkbox';
+
+            searchOptionCheckbox.addEventListener('change', function () {
+                site.search.allow = searchOptionCheckbox.checked;
+                chrome.storage.sync.set({sites: sites});
+            });
+
+            searchOptionLabel.className = 'SearchOptionLabel';
+            searchOptionLabel.innerHTML = '검색';
+            searchOptionLabel.appendChild(searchOptionCheckbox);
+
+            linkArea.className = 'LinkArea';
+            linkArea.appendChild(linkButton);
+
+            if (site.search !== null) {
+                searchOptionCheckbox.checked = site.search.allow;
+                linkArea.appendChild(searchOptionLabel);
+            }
+
+            switch (site.type) {
+                case 'Market':
+                    marketsArea.appendChild(linkArea);
+                    break;
+                /*
+                case 'Community':
+                    communitiesArea.appendChild(linkArea);
+                    break;
+                */
+            }
         });
 
-        searchOptionCheckbox.className = 'SearchOptionCheckbox';
-        searchOptionCheckbox.type = 'checkbox';
-
-        searchOptionCheckbox.addEventListener('change', function () {
-            site.search.allow = searchOptionCheckbox.checked;
+        searchInput.addEventListener('keypress', function (event) {
+            if (event.keyCode === 13) {
+                searchSites(sites, searchInput.value);
+            }
         });
 
-        searchOptionLabel.className = 'SearchOptionLabel';
-        searchOptionLabel.innerHTML = '검색';
-        searchOptionLabel.appendChild(searchOptionCheckbox);
-
-        linkArea.className = 'LinkArea';
-        linkArea.appendChild(linkButton);
-
-        if (site.search !== null) {
-            searchOptionCheckbox.checked = site.search.allow;
-            linkArea.appendChild(searchOptionLabel);
-        }
-
-        switch (site.type) {
-            case 'Market':
-                marketsArea.appendChild(linkArea);
-                break;
-            /*
-            case 'Community':
-                communitiesArea.appendChild(linkArea);
-                break;
-            */
-        }
+        searchButton.addEventListener('click', function () {
+            searchSites(sites, searchInput.value);
+        });
     });
-
-    searchInput.addEventListener('keypress', function (event) {
-        if (event.keyCode === 13) {
-            searchSites(searchInput.value);
-        }
-    });
-
-    searchButton.addEventListener('click', function () {
-        searchSites(searchInput.value);
-    });
-}(allSites));
+}());
