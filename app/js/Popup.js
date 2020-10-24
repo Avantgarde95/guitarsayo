@@ -2,7 +2,7 @@
     'use strict';
 
     var marketsArea = document.getElementsByClassName('MarketsArea')[0],
-        communitiesArea = document.getElementsByClassName('CommunitiesArea')[0],
+        //communitiesArea = document.getElementsByClassName('CommunitiesArea')[0],
         searchInput = document.getElementsByClassName('SearchInput')[0],
         searchButton = document.getElementsByClassName('SearchButton')[0];
 
@@ -61,9 +61,11 @@
             case 'Market':
                 marketsArea.appendChild(linkArea);
                 break;
+            /*
             case 'Community':
                 communitiesArea.appendChild(linkArea);
                 break;
+            */
         }
     });
 
