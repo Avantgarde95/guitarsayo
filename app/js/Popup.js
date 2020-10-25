@@ -1,8 +1,8 @@
-(function (sites) {
+(function () {
     'use strict';
 
     var marketsArea = document.getElementsByClassName('MarketsArea')[0],
-        communitiesArea = document.getElementsByClassName('CommunitiesArea')[0],
+        //communitiesArea = document.getElementsByClassName('CommunitiesArea')[0],
         searchInput = document.getElementsByClassName('SearchInput')[0],
         searchButton = document.getElementsByClassName('SearchButton')[0];
 
@@ -10,70 +10,110 @@
         chrome.tabs.create({url: url});
     }
 
-    function searchSites(query) {
-        var encodedQuery = encodeURIComponent(query.trim());
+    function searchSites(sites, query) {
+        var trimmedQuery = query.trim();
 
-        if (encodedQuery.length === 0) {
+        if (trimmedQuery.length === 0) {
             alert('검색어를 입력하세요.');
             return;
         }
 
         sites.forEach(function (site) {
-            if (site.search !== null && site.search.allow) {
-                openURL(site.search.url.replace('$', encodedQuery));
+            var finalQuery = trimmedQuery;
+
+            if (site.allowSearch) {
+                if (site.maxQueryLength > 0) {
+                    finalQuery = finalQuery.substr(0, site.maxQueryLength);
+                }
+
+                finalQuery = encodeURIComponent(finalQuery);
+                openURL(site.searchURL.replace('$', finalQuery));
             }
         });
     }
 
-    sites.forEach(function (site) {
-        var linkArea = document.createElement('div'),
-            linkButton = document.createElement('button'),
-            searchOptionLabel = document.createElement('label'),
-            searchOptionCheckbox = document.createElement('input');
+    function readSitesFromStorage(handler) {
+        chrome.storage.sync.get({sitesMap: {}}, function (result) {
+            var sitesMap = result.sitesMap,
+                sites = defaultSites.map(function (site) {
+                    if (sitesMap.hasOwnProperty(site.name)) {
+                        return Object.assign({}, site, sitesMap[site.name]);
+                    } else {
+                        return site;
+                    }
+                });
 
-        linkButton.className = 'LinkButton';
-        linkButton.innerHTML = site.name;
+            handler(sites);
+        });
+    }
 
-        linkButton.addEventListener('click', function () {
-            openURL(site.url);
+    function writeSitesToStorage(sites) {
+        var sitesMap = {};
+
+        sites.forEach(function (site) {
+            sitesMap[site.name] = site;
         });
 
-        searchOptionCheckbox.className = 'SearchOptionCheckbox';
-        searchOptionCheckbox.type = 'checkbox';
+        chrome.storage.sync.set({sitesMap: sitesMap});
+    }
 
-        searchOptionCheckbox.addEventListener('change', function () {
-            site.search.allow = searchOptionCheckbox.checked;
+    readSitesFromStorage(function (sites) {
+        // Write the data in case the property list is changed.
+        writeSitesToStorage(sites);
+
+        sites.forEach(function (site) {
+            var linkArea = document.createElement('div'),
+                linkButton = document.createElement('button'),
+                searchOptionLabel = document.createElement('label'),
+                searchOptionCheckbox = document.createElement('input');
+
+            linkButton.className = 'LinkButton';
+            linkButton.innerHTML = site.name;
+
+            linkButton.addEventListener('click', function () {
+                openURL(site.url);
+            });
+
+            searchOptionCheckbox.className = 'SearchOptionCheckbox';
+            searchOptionCheckbox.type = 'checkbox';
+
+            searchOptionCheckbox.addEventListener('change', function () {
+                site.allowSearch = searchOptionCheckbox.checked;
+                writeSitesToStorage(sites);
+            });
+
+            searchOptionLabel.className = 'SearchOptionLabel';
+            searchOptionLabel.innerHTML = '검색';
+            searchOptionLabel.appendChild(searchOptionCheckbox);
+
+            linkArea.className = 'LinkArea';
+            linkArea.appendChild(linkButton);
+
+            if (site.allowSearch !== null) {
+                searchOptionCheckbox.checked = site.allowSearch;
+                linkArea.appendChild(searchOptionLabel);
+            }
+
+            switch (site.type) {
+                case 'Market':
+                    marketsArea.appendChild(linkArea);
+                    break;
+                /*
+                case 'Community':
+                    communitiesArea.appendChild(linkArea);
+                    break;
+                */
+            }
         });
 
-        searchOptionLabel.className = 'SearchOptionLabel';
-        searchOptionLabel.innerHTML = '검색';
-        searchOptionLabel.appendChild(searchOptionCheckbox);
+        searchInput.addEventListener('keypress', function (event) {
+            if (event.keyCode === 13) {
+                searchSites(sites, searchInput.value);
+            }
+        });
 
-        linkArea.className = 'LinkArea';
-        linkArea.appendChild(linkButton);
-
-        if (site.search !== null) {
-            searchOptionCheckbox.checked = site.search.allow;
-            linkArea.appendChild(searchOptionLabel);
-        }
-
-        switch (site.type) {
-            case 'Market':
-                marketsArea.appendChild(linkArea);
-                break;
-            case 'Community':
-                communitiesArea.appendChild(linkArea);
-                break;
-        }
+        searchButton.addEventListener('click', function () {
+            searchSites(sites, searchInput.value);
+        });
     });
-
-    searchInput.addEventListener('keypress', function (event) {
-        if (event.keyCode === 13) {
-            searchSites(searchInput.value);
-        }
-    });
-
-    searchButton.addEventListener('click', function () {
-        searchSites(searchInput.value);
-    });
-}(allSites));
+}());
