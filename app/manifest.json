@@ -5,7 +5,6 @@
     "manifest_version": 2,
     "permissions": [
         "declarativeContent",
-        "activeTab",
         "storage"
     ],
     "content_security_policy": "script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com; object-src 'self'",
