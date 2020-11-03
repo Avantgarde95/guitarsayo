@@ -1,6 +1,5 @@
 # GuitarSayo
 
-¾Ç±â ±¸¸Å µµ¿ì¹Ì - °¢Á¾ ¾Ç±â ±¸¸Å »çÀÌÆ®µé°ú ÅëÇÕ°Ë»ö ±â´ÉÀ» Á¦°øÇÏ´Â È®Àå ÇÁ·Î±×·¥ÀÔ´Ï´Ù.
+ì•…ê¸° êµ¬ë§¤ ë„ìš°ë¯¸ - ê°ì¢… ì•…ê¸° êµ¬ë§¤ ì‚¬ì´íŠ¸ë“¤ê³¼ í†µí•©ê²€ìƒ‰ ê¸°ëŠ¥ì„ ì œê³µí•˜ëŠ” í™•ì¥ í”„ë¡œê·¸ë¨ì…ë‹ˆë‹¤.
 
-![Screenshot](https://github.com/Avantgarde95/guitarsayo/blob/master/image/Screenshot.png)
-
+![Screenshot](https://github.com/Avantgarde95/guitarsayo/blob/master/Screenshot.jpg)
